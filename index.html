@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Developer Portfolio</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts for handwritten headings and clean sans-serif text -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons for UI elements -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* Base typography & ambient desktop background setup */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #030712; /* Very dark navy background */
+      background-image: radial-gradient(circle at 50% 20%, rgba(30, 107, 255, 0.18), transparent 70%);
+      color: #ffffff;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Custom handwritten styling matching the mockup titles and tagline */
+    .handwritten-heading {
+      font-family: 'Caveat', cursive;
+    }
+
+    /* Deeper royal blue neon glow styles (#1e6bff) */
+    .glow-ring {
+      box-shadow: 0 0 25px rgba(30, 107, 255, 0.85), 0 0 12px rgba(30, 107, 255, 0.6);
+      animation: pulse-glow 3s infinite ease-in-out;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% {
+        box-shadow: 0 0 25px rgba(30, 107, 255, 0.85), 0 0 12px rgba(30, 107, 255, 0.6);
+      }
+      50% {
+        box-shadow: 0 0 35px rgba(30, 107, 255, 1), 0 0 18px rgba(30, 107, 255, 0.8);
+      }
+    }
+
+    .glow-line {
+      box-shadow: 0 0 12px rgba(30, 107, 255, 0.7);
+    }
+
+    /* SVG line glow filter styling */
+    .svg-glow {
+      filter: drop-shadow(0px 0px 8px rgba(30, 107, 255, 0.9));
+    }
+    
+    .svg-accent-glow {
+      filter: drop-shadow(0px 0px 10px rgba(30, 107, 255, 1));
+    }
+
+    /* Hero section full-width container */
+    .hero-container {
+      width: 100%;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* SVG viewport wrapper positioning */
+    .hero-svg-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* Logo placement inside SVG dip curve (Centered at X:50%, Y: 100px in 240px SVG -> 41.66% top) */
+    .hero-logo-container {
+      position: absolute;
+      top: 41.66%; 
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40%; /* Matches radius 80 in 400px viewBox */
+      max-width: 220px;
+      aspect-ratio: 1 / 1;
+      border-radius: 50%;
+      background-color: #030712;
+      border: 3px solid #1e6bff;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Halo Ring wrapper (Center 200, 100 in 400x240 viewBox with radius 92 -> 46% width) */
+    .hero-halo-ring {
+      position: absolute;
+      top: 41.66%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 46%;
+      max-width: 253px;
+      aspect-ratio: 1 / 1;
+      border-radius: 50%;
+      border: 10px solid rgba(30, 107, 255, 0.25);
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    /* Carousel item visual transitions with extra padding so glow isn't clipped */
+    .carousel-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 1000px;
+      touch-action: pan-y;
+      min-height: 480px;
+      padding: 1rem 0;
+    }
+
+    .carousel-card {
+      transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+      position: absolute;
+      width: 86%;
+      max-width: 360px;
+      user-select: none;
+    }
+
+    /* Card state styling: centered vs side cards with royal blue accent */
+    .card-center {
+      transform: translateX(0) scale(1);
+      opacity: 1;
+      z-index: 30;
+      pointer-events: auto;
+      border: 2px solid #1e6bff;
+      box-shadow: 0 0 25px rgba(30, 107, 255, 0.45);
+    }
+
+    .card-left {
+      transform: translateX(-78%) scale(0.85);
+      opacity: 0.35;
+      z-index: 10;
+      pointer-events: none;
+      border: 1px solid rgba(30, 107, 255, 0.4);
+      filter: blur(0.5px);
+    }
+
+    .card-right {
+      transform: translateX(78%) scale(0.85);
+      opacity: 0.35;
+      z-index: 10;
+      pointer-events: none;
+      border: 1px solid rgba(30, 107, 255, 0.4);
+      filter: blur(0.5px);
+    }
+
+    .card-hidden {
+      transform: translateX(0) scale(0.5);
+      opacity: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-between py-4 text-white">
+
+  <!-- FULL-WIDTH HERO LOGO SECTION -->
+  <header class="hero-container w-full pt-2 pb-2">
+    <div class="hero-svg-wrapper">
+      <!-- Inline SVG with cradling dip path, bright accent arc, and glow effects -->
+      <svg viewBox="0 0 400 240" class="w-full h-auto block overflow-visible" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <!-- Gradient for the thick bright accent arc (fades out at both ends) -->
+          <linearGradient id="arcGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#1e6bff" stop-opacity="0" />
+            <stop offset="30%" stop-color="#60a5fa" stop-opacity="1" />
+            <stop offset="50%" stop-color="#ffffff" stop-opacity="1" />
+            <stop offset="70%" stop-color="#60a5fa" stop-opacity="1" />
+            <stop offset="100%" stop-color="#1e6bff" stop-opacity="0" />
+          </linearGradient>
+
+          <!-- Subtle surface fill gradient under the line -->
+          <linearGradient id="surfaceGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="rgba(30, 107, 255, 0.08)" />
+            <stop offset="100%" stop-color="rgba(30, 107, 255, 0)" />
+          </linearGradient>
+        </defs>
+
+        <!-- Subtle surface shade beneath the line -->
+        <path d="M0,150 H70 C115,150 135,196 200,196 C265,196 285,150 330,150 H400 V240 H0 Z" 
+              fill="url(#surfaceGradient)" />
+
+        <!-- 1. Full-width thin glowing royal blue line (1.5px) -->
+        <path d="M0,150 H70 C115,150 135,196 200,196 C265,196 285,150 330,150 H400" 
+              fill="none" 
+              stroke="#1e6bff" 
+              stroke-width="1.5" 
+              class="svg-glow" />
+
+        <!-- 3. Thicker, brighter accent arc along the cup section under the logo -->
+        <path d="M110,155 C135,188 162,196 200,196 C238,196 265,188 290,155" 
+              fill="none" 
+              stroke="url(#arcGradient)" 
+              stroke-width="5" 
+              stroke-linecap="round"
+              class="svg-accent-glow" />
+      </svg>
+
+      <!-- 4. Soft halo ring around logo -->
+      <div class="hero-halo-ring"></div>
+
+      <!-- 5. Logo element centered inside the cradling line cup -->
+      <div id="hero-logo-box" class="hero-logo-container glow-ring">
+        <!-- Dynamic logo image or fallback text loaded via JS -->
+      </div>
+    </div>
+
+    <!-- 6. Tagline centered directly under hero with handwritten Caveat font -->
+    <div class="handwritten-heading flex items-center justify-center space-x-3 text-2xl sm:text-3xl font-semibold tracking-wide text-gray-100 mt-1">
+      <span>Freelancer</span>
+      <span class="text-[#1e6bff] font-bold">||</span>
+      <span>Web developer</span>
+      <span class="text-[#1e6bff] font-bold">||</span>
+      <span>App developer</span>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="w-full max-w-lg px-4 flex flex-col items-center">
+
+    <!-- PROJECTS SECTION -->
+    <section class="w-full my-2 flex flex-col items-center">
+      <!-- Section Heading with blue underline -->
+      <div class="text-center mb-1">
+        <h2 class="handwritten-heading text-4xl font-bold tracking-wide">Projects</h2>
+        
+      </div>
+
+      <!-- Carousel Viewport -->
+      <div id="carousel-viewport" class="carousel-container w-full relative overflow-visible">
+        <!-- Carousel cards rendered via JS -->
+      </div>
+
+      <!-- Navigation Controls: Arrows and Dots -->
+      <div class="flex flex-col items-center mt-1 space-y-3">
+        <div class="flex items-center space-x-8">
+          <!-- Previous Button -->
+          <button id="prev-btn" aria-label="Previous Slide" class="w-10 h-10 rounded-full border border-[#1e6bff]/70 flex items-center justify-center text-[#1e6bff] hover:bg-[#1e6bff]/20 active:scale-95 transition-all">
+            <i class="fa-solid fa-chevron-left text-base"></i>
+          </button>
+
+          <!-- Dynamic Dots Indicator -->
+          <div id="dots-container" class="flex space-x-2">
+            <!-- Dots generated dynamically via JavaScript -->
+          </div>
+
+          <!-- Next Button -->
+          <button id="next-btn" aria-label="Next Slide" class="w-10 h-10 rounded-full border border-[#1e6bff]/70 flex items-center justify-center text-[#1e6bff] hover:bg-[#1e6bff]/20 active:scale-95 transition-all">
+            <i class="fa-solid fa-chevron-right text-base"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- LETS BUILD SECTION -->
+    <section class="w-full mt-6 mb-8 flex flex-col items-center">
+      <!-- Section Heading with blue underline -->
+      <div class="text-center mb-6">
+        <h2 class="handwritten-heading text-4xl font-bold tracking-wide">Lets Build</h2>
+        <div class="w-16 h-1 bg-[#1e6bff] rounded-full mx-auto mt-1 glow-line"></div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="w-full space-y-4 px-2">
+        <!-- Email Contact Button -->
+        <a id="email-btn" href="#" class="w-full flex items-center justify-between p-3.5 bg-slate-950/80 border border-[#1e6bff]/70 rounded-xl hover:border-[#1e6bff] transition-all active:scale-[0.99] group shadow-lg shadow-blue-950/30">
+          <div class="flex items-center space-x-3.5">
+            <div class="w-10 h-10 rounded-full bg-[#1e6bff] flex items-center justify-center text-white">
+              <i class="fa-solid fa-envelope text-lg"></i>
+            </div>
+            <div class="text-left">
+              <div class="font-semibold text-sm text-white">Email</div>
+              <div id="email-text" class="text-xs text-gray-400"></div>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-hover:translate-x-1 transition-transform pr-2"></i>
+        </a>
+
+        <!-- WhatsApp Contact Button -->
+        <a id="whatsapp-btn" href="#" target="_blank" rel="noopener noreferrer" class="w-full flex items-center justify-between p-3.5 bg-slate-950/80 border border-[#1e6bff]/70 rounded-xl hover:border-[#1e6bff] transition-all active:scale-[0.99] group shadow-lg shadow-blue-950/30">
+          <div class="flex items-center space-x-3.5">
+            <div class="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white">
+              <i class="fa-brands fa-whatsapp text-xl"></i>
+            </div>
+            <div class="text-left">
+              <div class="font-semibold text-sm text-white">WhatsApp</div>
+              <div id="whatsapp-text" class="text-xs text-gray-400"></div>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-hover:translate-x-1 transition-transform pr-2"></i>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    /*===================================================================
+     * EASY CONFIGURATION DATA LIST
+     * Edit your logo, projects and contact detail settings in this section!
+     *===================================================================*/
+    const CONFIG = {
+      // HOW TO SWAP LOGO: 
+      // Put your image URL inside quotes below (e.g. "https://yourwebsite.com/logo.png").
+      // If left empty (""), it automatically shows the handwritten "LOGO" placeholder.
+      logoUrl: "", 
+
+      contact: {
+        email: "Impulsenocode@gmail.com",
+        whatsappLinkNumber: "2348163274578", // Clean international format without leading 0 or '+'
+        whatsappDisplay: "08163274578"       // Format shown to visitors
+      },
+      projects: [
+        {
+          id: 1,
+          title: "Project Title",
+          type: "Web Application",
+          demoUrl: "https://demo.link.com",
+          demoText: "demo.link.com",
+          image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
+          testimonial: {
+            quote: "“Amazing work! The application works perfectly and exceeded our expectations.”",
+            clientName: "Client Name",
+            clientRole: "CEO, Company",
+            stars: 5
+          }
+        },
+        {
+          id: 2,
+          title: "Mobile Fitness App",
+          type: "Mobile Application",
+          demoUrl: "https://fitness.demo.com",
+          demoText: "fitness.demo.com",
+          image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80",
+          testimonial: {
+            quote: "“Delivered our iOS and Android build on schedule with outstanding UI smooth interactions.”",
+            clientName: "Sarah Jenkins",
+            clientRole: "Founder, FitLife",
+            stars: 5
+          }
+        },
+        {
+          id: 3,
+          title: "Fintech Dashboard",
+          type: "Web Application",
+          demoUrl: "https://fintech.demo.com",
+          demoText: "fintech.demo.com",
+          image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
+          testimonial: {
+            quote: "“Extremely clean design code architecture. Highly recommended for complex SaaS applications.”",
+            clientName: "David Chen",
+            clientRole: "CTO, PayFlow",
+            stars: 5
+          }
+        },
+        {
+          id: 4,
+          title: "E-Commerce Experience",
+          type: "Fullstack Platform",
+          demoUrl: "https://shop.demo.com",
+          demoText: "shop.demo.com",
+          image: "https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=800&q=80",
+          testimonial: {
+            quote: "“Our sales increased by 40% after launching the new responsive site designed here!”",
+            clientName: "Elena Rostova",
+            clientRole: "Head of Growth, LuxBrand",
+            stars: 5
+          }
+        }
+      ]
+    };
+
+    // State management variables
+    let currentIndex = 0;
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    // Initialize application elements on load
+    window.addEventListener('DOMContentLoaded', () => {
+      initHeroLogo();
+      initContacts();
+      renderCarouselCards();
+      renderDots();
+      updateCarouselPositions();
+      setupTouchEvents();
+      setupKeyboardEvents();
+    });
+
+    // Render Logo image if available in CONFIG, otherwise fall back to handwritten text
+    function initHeroLogo() {
+      const logoContainer = document.getElementById('hero-logo-box');
+      if (CONFIG.logoUrl && CONFIG.logoUrl.trim() !== "") {
+        const img = document.createElement('img');
+        img.src = CONFIG.logoUrl;
+        img.alt = "Logo";
+        img.className = "w-full h-full object-cover rounded-full";
+        img.onerror = function() {
+          this.onerror = null;
+          renderLogoTextFallback(logoContainer);
+        };
+        logoContainer.appendChild(img);
+      } else {
+        renderLogoTextFallback(logoContainer);
+      }
+    }
+
+    // Helper function to render text fallback inside logo circle
+    function renderLogoTextFallback(container) {
+      container.innerHTML = `<span class="handwritten-heading text-3xl sm:text-4xl font-bold tracking-widest text-white">LOGO</span>`;
+    }
+
+    // Populate Contact links based on CONFIG
+    function initContacts() {
+      const emailBtn = document.getElementById('email-btn');
+      const emailText = document.getElementById('email-text');
+      emailBtn.href = `mailto:${CONFIG.contact.email}`;
+      emailText.textContent = CONFIG.contact.email;
+
+      const whatsappBtn = document.getElementById('whatsapp-btn');
+      const whatsappText = document.getElementById('whatsapp-text');
+      whatsappBtn.href = `https://wa.me/${CONFIG.contact.whatsappLinkNumber}`;
+      whatsappText.textContent = CONFIG.contact.whatsappDisplay;
+    }
+
+    // Generate HTML for project cards dynamically
+    function renderCarouselCards() {
+      const viewport = document.getElementById('carousel-viewport');
+      viewport.innerHTML = '';
+
+      CONFIG.projects.forEach((item, idx) => {
+        const card = document.createElement('div');
+        card.className = `carousel-card bg-slate-950/90 rounded-2xl overflow-hidden shadow-2xl transition-all duration-300`;
+        card.setAttribute('data-index', idx);
+
+        // Generate gold stars snippet
+        let starIcons = '';
+        for (let i = 0; i < item.testimonial.stars; i++) {
+          starIcons += `<i class="fa-solid fa-star text-amber-400 text-xs"></i>`;
+        }
+
+        card.innerHTML = `
+          <!-- Card Image Header -->
+          <div class="h-44 w-full relative overflow-hidden bg-slate-900">
+            <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover object-center" onerror="this.onerror=null; this.src='https://placehold.co/600x400/1e6bff/ffffff?text=Project+Preview';">
+          </div>
+
+          <!-- Card Main Content -->
+          <div class="p-4 flex flex-col justify-between">
+            <div>
+              <h3 class="text-lg font-bold text-white tracking-tight">${item.title}</h3>
+              <p class="text-xs text-gray-400 mt-0.5">${item.type}</p>
+              
+              <!-- Demo Link with secure rel attribute -->
+              <a href="${item.demoUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 text-xs text-[#1e6bff] hover:text-blue-400 mt-2 font-medium">
+                <i class="fa-solid fa-link"></i>
+                <span>${item.demoText}</span>
+              </a>
+            </div>
+
+            <!-- Testimonial Box -->
+            <div class="mt-4 p-3 bg-slate-900/90 rounded-xl border border-slate-800 flex flex-col justify-between space-y-2">
+              <div class="flex items-start space-x-2">
+                <i class="fa-solid fa-quote-left text-[#1e6bff] text-sm mt-0.5 opacity-80"></i>
+                <p class="text-xs text-gray-300 leading-snug italic font-light">${item.testimonial.quote}</p>
+              </div>
+
+              <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 mt-1">
+                <div class="flex items-center space-x-2">
+                  <div class="w-6 h-6 rounded-full bg-slate-800 border border-[#1e6bff]/50 flex items-center justify-center text-[#1e6bff]">
+                    <i class="fa-regular fa-user text-[10px]"></i>
+                  </div>
+                  <div class="text-[11px]">
+                    <div class="font-semibold text-white leading-tight">${item.testimonial.clientName}</div>
+                    <div class="text-[9px] text-gray-400 leading-none">${item.testimonial.clientRole}</div>
+                  </div>
+                </div>
+                <!-- Stars -->
+                <div class="flex space-x-0.5">
+                  ${starIcons}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        viewport.appendChild(card);
+      });
+    }
+
+    // Build pagination indicators
+    function renderDots() {
+      const dotsContainer = document.getElementById('dots-container');
+      dotsContainer.innerHTML = '';
+
+      CONFIG.projects.forEach((_, idx) => {
+        const dot = document.createElement('button');
+        dot.ariaLabel = `Go to slide ${idx + 1}`;
+        dot.className = `w-2.5 h-2.5 rounded-full transition-all duration-300 ${idx === currentIndex ? 'bg-[#1e6bff] w-5 glow-line' : 'bg-slate-700 hover:bg-slate-600'}`;
+        dot.addEventListener('click', () => {
+          currentIndex = idx;
+          updateCarouselPositions();
+        });
+        dotsContainer.appendChild(dot);
+      });
+    }
+
+    // Apply positioning classes to cards relative to active slide index
+    function updateCarouselPositions() {
+      const cards = document.querySelectorAll('.carousel-card');
+      const total = CONFIG.projects.length;
+
+      cards.forEach((card, idx) => {
+        // Reset positioning classes
+        card.classList.remove('card-center', 'card-left', 'card-right', 'card-hidden');
+
+        // Calculate cyclic positioning offset
+        let diff = idx - currentIndex;
+        if (diff < -1 && currentIndex === total - 1) diff = diff + total;
+        if (diff > 1 && currentIndex === 0) diff = diff - total;
+
+        if (diff === 0) {
+          card.classList.add('card-center');
+        } else if (diff === -1 || (currentIndex === 0 && idx === total - 1)) {
+          card.classList.add('card-left');
+        } else if (diff === 1 || (currentIndex === total - 1 && idx === 0)) {
+          card.classList.add('card-right');
+        } else {
+          card.classList.add('card-hidden');
+        }
+      });
+
+      // Update active state on pagination dots
+      const dots = document.getElementById('dots-container').children;
+      Array.from(dots).forEach((dot, idx) => {
+        if (idx === currentIndex) {
+          dot.className = 'w-5 h-2.5 rounded-full bg-[#1e6bff] transition-all duration-300 glow-line';
+        } else {
+          dot.className = 'w-2.5 h-2.5 rounded-full bg-slate-700 hover:bg-slate-600 transition-all duration-300';
+        }
+      });
+    }
+
+    // Navigation events
+    document.getElementById('prev-btn').addEventListener('click', () => {
+      currentIndex = (currentIndex - 1 + CONFIG.projects.length) % CONFIG.projects.length;
+      updateCarouselPositions();
+    });
+
+    document.getElementById('next-btn').addEventListener('click', () => {
+      currentIndex = (currentIndex + 1) % CONFIG.projects.length;
+      updateCarouselPositions();
+    });
+
+    // Left and Right Arrow key support
+    function setupKeyboardEvents() {
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+          currentIndex = (currentIndex - 1 + CONFIG.projects.length) % CONFIG.projects.length;
+          updateCarouselPositions();
+        } else if (e.key === 'ArrowRight') {
+          currentIndex = (currentIndex + 1) % CONFIG.projects.length;
+          updateCarouselPositions();
+        }
+      });
+    }
+
+    // Touch swipe gesture implementation
+    function setupTouchEvents() {
+      const viewport = document.getElementById('carousel-viewport');
+
+      viewport.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+
+      viewport.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+      }, { passive: true });
+    }
+
+    function handleSwipe() {
+      const swipeThreshold = 40;
+      if (touchEndX < touchStartX - swipeThreshold) {
+        // Swipe left -> Next card
+        currentIndex = (currentIndex + 1) % CONFIG.projects.length;
+        updateCarouselPositions();
+      } else if (touchEndX > touchStartX + swipeThreshold) {
+        // Swipe right -> Previous card
+        currentIndex = (currentIndex - 1 + CONFIG.projects.length) % CONFIG.projects.length;
+        updateCarouselPositions();
+      }
+    }
+  </script>
+</body>
+</html>
