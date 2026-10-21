@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,10 +9,10 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Google Fonts for handwritten headings and clean sans-serif text -->
+  <!-- Google Fonts for clean modern headings (Poppins) and sans-serif text (Inter) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
   
   <!-- FontAwesome Icons for UI elements -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -27,9 +28,9 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* Custom handwritten styling matching the mockup titles and tagline */
-    .handwritten-heading {
-      font-family: 'Caveat', cursive;
+    /* Heading typography matching Poppins font */
+    .heading-font {
+      font-family: 'Poppins', sans-serif;
     }
 
     /* Deeper royal blue neon glow styles (#1e6bff) */
@@ -112,15 +113,15 @@
       pointer-events: none;
     }
 
-    /* Carousel item visual transitions with extra padding so glow isn't clipped */
+    /* Carousel item visual transitions with optimized height for cards without testimonials */
     .carousel-container {
       display: flex;
       align-items: center;
       justify-content: center;
       perspective: 1000px;
       touch-action: pan-y;
-      min-height: 480px;
-      padding: 1rem 0;
+      min-height: 380px;
+      padding: 0.75rem 0;
     }
 
     .carousel-card {
@@ -164,6 +165,27 @@
       opacity: 0;
       z-index: 0;
       pointer-events: none;
+    }
+
+    /* Scroll Preview vertical animation for images */
+    @keyframes slow-pan-y {
+      0%, 100% { object-position: top; }
+      50% { object-position: bottom; }
+    }
+
+    .card-center .animate-scroll-preview {
+      animation: slow-pan-y 12s ease-in-out infinite;
+    }
+
+    .card-center:hover .animate-scroll-preview,
+    .card-center:active .animate-scroll-preview {
+      animation-play-state: paused;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .animate-scroll-preview {
+        animation: none !important;
+      }
     }
   </style>
 </head>
@@ -220,12 +242,12 @@
       </div>
     </div>
 
-    <!-- 6. Tagline centered directly under hero with handwritten Caveat font -->
-    <div class="handwritten-heading flex items-center justify-center space-x-3 text-2xl sm:text-3xl font-semibold tracking-wide text-gray-100 mt-1">
+    <!-- 6. Tagline centered directly under hero using Poppins font, forced to 1 line on 360px screens -->
+    <div class="heading-font flex items-center justify-center space-x-1.5 sm:space-x-3 text-xs min-[360px]:text-sm sm:text-base font-medium tracking-wide text-gray-100 mt-1 whitespace-nowrap px-2">
       <span>Freelancer</span>
-      <span class="text-[#1e6bff] font-bold">||</span>
+      <div class="w-[2px] h-3.5 bg-[#1e6bff] rounded-full mx-0.5 glow-line inline-block"></div>
       <span>Web developer</span>
-      <span class="text-[#1e6bff] font-bold">||</span>
+      <div class="w-[2px] h-3.5 bg-[#1e6bff] rounded-full mx-0.5 glow-line inline-block"></div>
       <span>App developer</span>
     </div>
   </header>
@@ -237,8 +259,8 @@
     <section class="w-full my-2 flex flex-col items-center">
       <!-- Section Heading with blue underline -->
       <div class="text-center mb-1">
-        <h2 class="handwritten-heading text-4xl font-bold tracking-wide">Projects</h2>
-        
+        <h2 class="heading-font text-2xl sm:text-3xl font-semibold tracking-wide">Projects</h2>
+        <div class="w-12 h-1 bg-[#1e6bff] rounded-full mx-auto mt-1 glow-line"></div>
       </div>
 
       <!-- Carousel Viewport -->
@@ -271,8 +293,8 @@
     <section class="w-full mt-6 mb-8 flex flex-col items-center">
       <!-- Section Heading with blue underline -->
       <div class="text-center mb-6">
-        <h2 class="handwritten-heading text-4xl font-bold tracking-wide">Lets Build</h2>
-        <div class="w-16 h-1 bg-[#1e6bff] rounded-full mx-auto mt-1 glow-line"></div>
+        <h2 class="heading-font text-2xl sm:text-3xl font-semibold tracking-wide">Lets Build</h2>
+        <div class="w-12 h-1 bg-[#1e6bff] rounded-full mx-auto mt-1 glow-line"></div>
       </div>
 
       <!-- Action Buttons -->
@@ -312,75 +334,66 @@
   <script>
     /*===================================================================
      * EASY CONFIGURATION DATA LIST
-     * Edit your logo, projects and contact detail settings in this section!
+     * Edit logo, projects list, and contact details below!
      *===================================================================*/
+
+    /*
+     * HOW TO SWAP LOGO:
+     * Put your image URL inside quotes below (e.g. "images/logo.png" or "https://domain.com/logo.png").
+     * If left empty (""), it automatically displays the Poppins "LOGO" placeholder text.
+     */
     const CONFIG = {
-      // HOW TO SWAP LOGO: 
-      // Put your image URL inside quotes below (e.g. "https://yourwebsite.com/logo.png").
-      // If left empty (""), it automatically shows the handwritten "LOGO" placeholder.
       logoUrl: "", 
 
       contact: {
         email: "Impulsenocode@gmail.com",
-        whatsappLinkNumber: "2348163274578", // Clean international format without leading 0 or '+'
-        whatsappDisplay: "08163274578"       // Format shown to visitors
+        whatsappLinkNumber: "2348163274578", // International format without '+' or leading 0
+        whatsappDisplay: "08163274578"       // Visitor display format
       },
+
+      /*
+       * HOW TO SWAP PROJECT IMAGES:
+       * Place project screenshots in an "images" folder next to index.html (e.g. "images/my-project.webp")
+       * or pass a full URL string. If left empty (""), a dark blue wireframe SVG placeholder renders automatically.
+       * 
+       * Project `types` accepts a list: "Website", "Web app", "App".
+       */
       projects: [
         {
           id: 1,
-          title: "Project Title",
-          type: "Web Application",
-          demoUrl: "https://demo.link.com",
-          demoText: "demo.link.com",
-          image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
-          testimonial: {
-            quote: "“Amazing work! The application works perfectly and exceeded our expectations.”",
-            clientName: "Client Name",
-            clientRole: "CEO, Company",
-            stars: 5
-          }
+          title: "SaaS Analytics Dashboard",
+          types: ["Web app"],
+          link: "https://demo.link.com",
+          linkText: "demo.link.com",
+          image: "",
+          scrollPreview: false
         },
         {
           id: 2,
-          title: "Mobile Fitness App",
-          type: "Mobile Application",
-          demoUrl: "https://fitness.demo.com",
-          demoText: "fitness.demo.com",
-          image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80",
-          testimonial: {
-            quote: "“Delivered our iOS and Android build on schedule with outstanding UI smooth interactions.”",
-            clientName: "Sarah Jenkins",
-            clientRole: "Founder, FitLife",
-            stars: 5
-          }
+          title: "Fitness & Tracker Mobile App",
+          types: ["App"],
+          link: "https://fitness.demo.com",
+          linkText: "fitness.demo.com",
+          image: "",
+          scrollPreview: false
         },
         {
           id: 3,
-          title: "Fintech Dashboard",
-          type: "Web Application",
-          demoUrl: "https://fintech.demo.com",
-          demoText: "fintech.demo.com",
-          image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
-          testimonial: {
-            quote: "“Extremely clean design code architecture. Highly recommended for complex SaaS applications.”",
-            clientName: "David Chen",
-            clientRole: "CTO, PayFlow",
-            stars: 5
-          }
+          title: "Fintech Platform",
+          types: ["Website", "Web app"],
+          link: "https://fintech.demo.com",
+          linkText: "fintech.demo.com",
+          image: "",
+          scrollPreview: false
         },
         {
           id: 4,
-          title: "E-Commerce Experience",
-          type: "Fullstack Platform",
-          demoUrl: "https://shop.demo.com",
-          demoText: "shop.demo.com",
-          image: "https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=800&q=80",
-          testimonial: {
-            quote: "“Our sales increased by 40% after launching the new responsive site designed here!”",
-            clientName: "Elena Rostova",
-            clientRole: "Head of Growth, LuxBrand",
-            stars: 5
-          }
+          title: "Cross-Platform E-Commerce",
+          types: ["Web app", "App"],
+          link: "https://shop.demo.com",
+          linkText: "shop.demo.com",
+          image: "",
+          scrollPreview: false
         }
       ]
     };
@@ -401,7 +414,7 @@
       setupKeyboardEvents();
     });
 
-    // Render Logo image if available in CONFIG, otherwise fall back to handwritten text
+    // Render Logo image if available in CONFIG, otherwise fall back to Poppins text
     function initHeroLogo() {
       const logoContainer = document.getElementById('hero-logo-box');
       if (CONFIG.logoUrl && CONFIG.logoUrl.trim() !== "") {
@@ -419,9 +432,9 @@
       }
     }
 
-    // Helper function to render text fallback inside logo circle
+    // Helper function to render text fallback inside logo circle using Poppins
     function renderLogoTextFallback(container) {
-      container.innerHTML = `<span class="handwritten-heading text-3xl sm:text-4xl font-bold tracking-widest text-white">LOGO</span>`;
+      container.innerHTML = `<span class="heading-font text-lg font-semibold tracking-widest text-white">LOGO</span>`;
     }
 
     // Populate Contact links based on CONFIG
@@ -437,6 +450,73 @@
       whatsappText.textContent = CONFIG.contact.whatsappDisplay;
     }
 
+    // Helper: SVG Wireframe Placeholder (No external images required)
+    function getWireframePlaceholderSvg() {
+      const svgString = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 250" class="w-full h-full">
+        <rect width="400" height="250" fill="#091328"/>
+        <rect x="0" y="0" width="400" height="35" fill="#111c38"/>
+        <rect x="20" y="10" width="60" height="15" rx="4" fill="#1e6bff" opacity="0.8"/>
+        <rect x="300" y="10" width="80" height="15" rx="4" fill="#1e3a8a"/>
+        <rect x="20" y="55" width="220" height="20" rx="4" fill="#1e3a8a"/>
+        <rect x="20" y="85" width="160" height="12" rx="3" fill="#111c38"/>
+        <rect x="20" y="115" width="110" height="110" rx="8" fill="#11254e" stroke="#1e6bff" stroke-width="1.5" stroke-dasharray="4"/>
+        <rect x="145" y="115" width="110" height="110" rx="8" fill="#11254e" stroke="#1e6bff" stroke-width="1.5" stroke-dasharray="4"/>
+        <rect x="270" y="115" width="110" height="110" rx="8" fill="#11254e" stroke="#1e6bff" stroke-width="1.5" stroke-dasharray="4"/>
+        <text x="200" y="175" fill="#60a5fa" font-family="sans-serif" font-size="14" font-weight="500" text-anchor="middle">Screenshot goes here</text>
+      </svg>`;
+      return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgString)}`;
+    }
+
+    // Helper: Build Browser / Phone frame HTML
+    function buildImageFrame(item) {
+      const isAppOnly = item.types.length === 1 && item.types[0] === "App";
+      const hasImage = item.image && item.image.trim() !== "";
+      const imgSrc = hasImage ? item.image : getWireframePlaceholderSvg();
+      const scrollClass = item.scrollPreview ? "animate-scroll-preview" : "";
+
+      if (isAppOnly) {
+        // Rounded Phone Frame
+        return `
+          <div class="w-full bg-slate-900/90 p-3 flex justify-center items-center rounded-t-xl border-b border-slate-800">
+            <div class="w-36 h-56 bg-slate-950 rounded-[24px] p-1.5 border-2 border-slate-700 shadow-inner relative overflow-hidden flex flex-col items-center">
+              <!-- Mobile Phone Speaker / Camera Notch -->
+              <div class="w-12 h-2.5 bg-slate-800 rounded-b-md absolute top-1.5 z-20"></div>
+              <!-- Phone Screen Viewport -->
+              <div class="w-full h-full rounded-[18px] overflow-hidden bg-slate-900 relative">
+                <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="block w-full h-full">
+                  <img src="${imgSrc}" alt="${item.title}" class="w-full h-full object-cover object-top ${scrollClass}" onerror="this.onerror=null; this.src='${getWireframePlaceholderSvg()}';">
+                </a>
+              </div>
+            </div>
+          </div>
+        `;
+      } else {
+        // Slim Desktop Browser Frame
+        return `
+          <div class="w-full bg-slate-900 rounded-t-xl border-b border-slate-800 overflow-hidden">
+            <!-- Browser Header Bar -->
+            <div class="px-3 py-2 bg-slate-950 flex items-center space-x-2 border-b border-slate-800">
+              <div class="flex space-x-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-rose-500/80 inline-block"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-500/80 inline-block"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80 inline-block"></span>
+              </div>
+              <!-- Address Bar -->
+              <div class="flex-1 bg-slate-900 text-[10px] text-gray-400 px-2.5 py-0.5 rounded-md truncate font-mono text-center border border-slate-800/80">
+                ${item.linkText}
+              </div>
+            </div>
+            <!-- Browser Content Viewport (16:10 aspect ratio screenshot container) -->
+            <div class="w-full aspect-[16/10] overflow-hidden bg-slate-950 relative">
+              <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="block w-full h-full">
+                <img src="${imgSrc}" alt="${item.title}" class="w-full h-full object-cover object-top ${scrollClass}" onerror="this.onerror=null; this.src='${getWireframePlaceholderSvg()}';">
+              </a>
+            </div>
+          </div>
+        `;
+      }
+    }
+
     // Generate HTML for project cards dynamically
     function renderCarouselCards() {
       const viewport = document.getElementById('carousel-viewport');
@@ -447,53 +527,35 @@
         card.className = `carousel-card bg-slate-950/90 rounded-2xl overflow-hidden shadow-2xl transition-all duration-300`;
         card.setAttribute('data-index', idx);
 
-        // Generate gold stars snippet
-        let starIcons = '';
-        for (let i = 0; i < item.testimonial.stars; i++) {
-          starIcons += `<i class="fa-solid fa-star text-amber-400 text-xs"></i>`;
-        }
+        // Render type pill tags
+        const typeTagsHtml = item.types.map(t => 
+          `<span class="px-2 py-0.5 text-[10px] font-medium text-blue-300 border border-[#1e6bff]/50 rounded-full bg-[#1e6bff]/10">${t}</span>`
+        ).join('');
+
+        const frameHtml = buildImageFrame(item);
 
         card.innerHTML = `
-          <!-- Card Image Header -->
-          <div class="h-44 w-full relative overflow-hidden bg-slate-900">
-            <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover object-center" onerror="this.onerror=null; this.src='https://placehold.co/600x400/1e6bff/ffffff?text=Project+Preview';">
-          </div>
+          <!-- Card Frame Header -->
+          ${frameHtml}
 
-          <!-- Card Main Content -->
-          <div class="p-4 flex flex-col justify-between">
+          <!-- Card Content Footer -->
+          <div class="p-4 flex flex-col justify-between space-y-2">
             <div>
-              <h3 class="text-lg font-bold text-white tracking-tight">${item.title}</h3>
-              <p class="text-xs text-gray-400 mt-0.5">${item.type}</p>
+              <!-- Title -->
+              <h3 class="text-base font-bold text-white tracking-tight">${item.title}</h3>
               
-              <!-- Demo Link with secure rel attribute -->
-              <a href="${item.demoUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 text-xs text-[#1e6bff] hover:text-blue-400 mt-2 font-medium">
-                <i class="fa-solid fa-link"></i>
-                <span>${item.demoText}</span>
-              </a>
+              <!-- Type tags list -->
+              <div class="flex flex-wrap gap-1.5 mt-1.5">
+                ${typeTagsHtml}
+              </div>
             </div>
 
-            <!-- Testimonial Box -->
-            <div class="mt-4 p-3 bg-slate-900/90 rounded-xl border border-slate-800 flex flex-col justify-between space-y-2">
-              <div class="flex items-start space-x-2">
-                <i class="fa-solid fa-quote-left text-[#1e6bff] text-sm mt-0.5 opacity-80"></i>
-                <p class="text-xs text-gray-300 leading-snug italic font-light">${item.testimonial.quote}</p>
-              </div>
-
-              <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 mt-1">
-                <div class="flex items-center space-x-2">
-                  <div class="w-6 h-6 rounded-full bg-slate-800 border border-[#1e6bff]/50 flex items-center justify-center text-[#1e6bff]">
-                    <i class="fa-regular fa-user text-[10px]"></i>
-                  </div>
-                  <div class="text-[11px]">
-                    <div class="font-semibold text-white leading-tight">${item.testimonial.clientName}</div>
-                    <div class="text-[9px] text-gray-400 leading-none">${item.testimonial.clientRole}</div>
-                  </div>
-                </div>
-                <!-- Stars -->
-                <div class="flex space-x-0.5">
-                  ${starIcons}
-                </div>
-              </div>
+            <!-- Demo Link -->
+            <div class="pt-1">
+              <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 text-xs text-[#1e6bff] hover:text-blue-400 font-medium truncate max-w-full">
+                <i class="fa-solid fa-link text-[11px] flex-shrink-0"></i>
+                <span class="truncate">${item.linkText}</span>
+              </a>
             </div>
           </div>
         `;
