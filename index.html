@@ -21,9 +21,9 @@
     /* Base typography & ambient desktop background setup */
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #030712; /* Very dark navy background */
-      background-image: radial-gradient(circle at 50% 20%, rgba(30, 107, 255, 0.18), transparent 70%);
-      color: #ffffff;
+      background-color: #d1d5db; /* Very dark navy background */
+      background-image: none;
+      color: #000000;
       overflow-x: hidden;
       -webkit-tap-highlight-color: transparent;
     }
@@ -189,7 +189,7 @@
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-between py-4 text-white">
+<body class="min-h-screen flex flex-col items-center justify-between py-4 text-black">
 
   <!-- FULL-WIDTH HERO LOGO SECTION -->
   <header class="hero-container w-full pt-2 pb-2">
@@ -212,7 +212,8 @@
             <stop offset="100%" stop-color="rgba(30, 107, 255, 0)" />
           </linearGradient>
         </defs>
-
+<path d="M-2000,-2000 H2400 V150 H330 C285,150 265,196 200,196 C135,196 115,150 70,150 H-2000 Z"
+      fill="#ffffff" />
         <!-- Subtle surface shade beneath the line -->
         <path d="M0,150 H70 C115,150 135,196 200,196 C265,196 285,150 330,150 H400 V240 H0 Z" 
               fill="url(#surfaceGradient)" />
@@ -243,7 +244,7 @@
     </div>
 
     <!-- 6. Tagline centered directly under hero using Poppins font, forced to 1 line on 360px screens -->
-    <div class="heading-font flex items-center justify-center space-x-1.5 sm:space-x-3 text-xs min-[360px]:text-sm sm:text-base font-medium tracking-wide text-gray-100 mt-1 whitespace-nowrap px-2">
+    <div class="heading-font flex items-center justify-center space-x-1.5 sm:space-x-3 text-xs min-[360px]:text-sm sm:text-base font-medium tracking-wide text-black mt-1 whitespace-nowrap px-2">
       <span>Freelancer</span>
       <div class="w-[2px] h-3.5 bg-[#1e6bff] rounded-full mx-0.5 glow-line inline-block"></div>
       <span>Web developer</span>
